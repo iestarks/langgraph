@@ -38,8 +38,26 @@ jobs:
       pull-requests: write
 
     steps:
+      # Fork-friendly: the org-membership GitHub App credentials only exist
+      # on langchain-ai. Secrets cannot be read in an `if` conditional, so a
+      # detection step surfaces the result as an output and the token step is
+      # skipped (job reports Success) when they are absent.
+      - name: Detect org-membership app configuration
+        id: has-app
+        env:
+          ORG_MEMBERSHIP_APP_ID: ${{ secrets.ORG_MEMBERSHIP_APP_ID }}
+          ORG_MEMBERSHIP_APP_PRIVATE_KEY: ${{ secrets.ORG_MEMBERSHIP_APP_PRIVATE_KEY }}
+        run: |
+          if [ -n "$ORG_MEMBERSHIP_APP_ID" ] && [ -n "$ORG_MEMBERSHIP_APP_PRIVATE_KEY" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ORG_MEMBERSHIP_APP_ID / ORG_MEMBERSHIP_APP_PRIVATE_KEY not set - skipping external-contributor tagging (fork/no app configured)."
+          fi
+
       - name: Generate GitHub App token
         id: app-token
+        if: steps.has-app.outputs.configured == 'true'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ secrets.ORG_MEMBERSHIP_APP_ID }}
