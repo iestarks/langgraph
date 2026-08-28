@@ -1,0 +1,8 @@
+# Langfuse Python SDK (v3+ uses OpenTelemetry; includes langfuse.langchain CallbackHandler)
+langfuse>=3.0.0
+# LangGraph core
+langgraph>=1.0.0
+# Required by the Langfuse LangChain/LangGraph callback integration
+langchain>=1.0.0
+# LLM provider used by the demo (swap for any langchain-* provider package)
+langchain-openai>=1.0.0
