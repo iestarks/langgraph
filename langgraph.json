@@ -1,0 +1,6 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "agent": "./agents/langgraph-test.py:graph"
+  }
+}

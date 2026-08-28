@@ -32,6 +32,52 @@ pip install -U langgraph
 
 For an equivalent JS/TS library, check out [LangGraph.js](https://github.com/langchain-ai/langgraphjs) and the [JS docs](https://docs.langchain.com/oss/javascript/langgraph/overview).
 
+## Local test agent (`agents/langgraph-test.py`)
+
+A minimal example graph lives at [`agents/langgraph-test.py`](agents/langgraph-test.py). It defines a single `processor` node that takes `input_text` and returns `reply: "Processed: <input_text>"`.
+
+### Run it directly (no server)
+
+```bash
+python3 agents/langgraph-test.py
+# {'input_text': 'hello world', 'reply': 'Processed: hello world'}
+```
+
+### Serve it with the dev server
+
+The repo root contains a `langgraph.json` config that registers the compiled graph under the assistant name `agent`:
+
+```json
+{
+  "dependencies": ["."],
+  "graphs": {
+    "agent": "./agents/langgraph-test.py:graph"
+  }
+}
+```
+
+Start the dev server (API on `http://127.0.0.1:2024`):
+
+```bash
+langgraph dev
+```
+
+Then open LangGraph Studio: <https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024>
+
+### Test it via the API
+
+With the dev server running:
+
+```bash
+curl -s -X POST http://127.0.0.1:2024/runs/wait \
+  -H 'Content-Type: application/json' \
+  -d '{"assistant_id": "agent", "input": {"input_text": "hello from the API"}}'
+# {"input_text":"hello from the API","reply":"Processed: hello from the API"}
+```
+
+> [!NOTE]
+> Graph paths in `langgraph.json` resolve **relative to the config file's directory**, and the value must be `<file-path>:<variable-name>` where the variable holds a compiled graph.
+
 ## Why use LangGraph?
 
 LangGraph provides low-level supporting infrastructure for *any* long-running, stateful workflow or agent:
