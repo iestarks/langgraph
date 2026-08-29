@@ -1,0 +1,6 @@
+# LangGraph — installed from this fork (iestarks/langgraph)
+langgraph @ git+https://github.com/iestarks/langgraph.git@main#subdirectory=libs/langgraph
+
+# Only needed for a LIVE scan with the full agent (companion repo):
+# azure-identity>=1.19.0
+# httpx>=0.27.0
