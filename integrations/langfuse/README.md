@@ -77,8 +77,11 @@ wire in code.
 
 ## Step 4 — Install dependencies
 
+> **macOS note:** if `python3` is not found, install the Xcode Command Line
+> Tools first: `xcode-select --install`
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 

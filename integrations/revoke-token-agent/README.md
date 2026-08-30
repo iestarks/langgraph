@@ -48,8 +48,11 @@ principals), and prints the accounts to stdout.
 
 ## Step 1 — Install (uses this fork as the LangGraph source)
 
+> **macOS note:** if `python3` is not found, install the Xcode Command Line
+> Tools first: `xcode-select --install`
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt   # installs langgraph from iestarks/langgraph
 ```
 
@@ -79,7 +82,7 @@ The production agent lives in the companion repo:
 ```bash
 git clone https://github.com/iestarks/revoke-token-agent.git
 cd revoke-token-agent
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt && pip install -e .
 
 az login                      # or configure AZURE_CLIENT_ID/... (see .env.example)
